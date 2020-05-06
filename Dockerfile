@@ -27,15 +27,7 @@ RUN apt-get update && \
     openssh-client && \
     curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
     apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists/*
-
-# RUN zing setup
-COPY zing.sh /etc/profile.d/zing.sh
-COPY scripts /home/zing/scripts
-COPY serge.cron /etc/cron.d/serge
-COPY zing.cron /etc/cron.d/zing
-
-RUN mkdir -p /srv/zing/po/.tmp && \
+    mkdir -p /srv/zing/po/.tmp && \
     pip install --upgrade pip && \
     pip install mysqlclient && \
     pip install https://github.com/evernote/zing/archive/$ZING_VERSION.zip && \
@@ -66,9 +58,13 @@ RUN mkdir -p /srv/zing/po/.tmp && \
     libmariadbclient-dev \
     nodejs && \
     apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    cp /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/checks.py /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/no_checks.py && \
+    sed -i "s|@critical|@cosmetic|" /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/no_checks.py && \
+    sed -i "s|ENChecker|NonChecker|" /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/no_checks.py
 
 # Configure zing
+COPY zing.sh /etc/profile.d/zing.sh
 COPY zing.conf /root/.zing/zing.conf
 
 WORKDIR /var/serge/projects/

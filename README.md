@@ -31,7 +31,7 @@ Fork of https://github.com/1drop/zing with an updated version of Zing and integr
 
 ## Initialize MySQL DB on first Start
 
-    docker run -it --rm -e MYSQL_HOST "mysql" -e MYSQL_DATABASE "zing" -e MYSQL_USER "zing" -e MYSQL_PASSWORD "ChangeMe" arturh85/zing-serge bash
+    docker run -it --rm -e MYSQL_HOST "mysql" -e MYSQL_DATABASE "zing" -e MYSQL_USER "zing" -e MYSQL_PASSWORD "ChangeMe" zing-serge bash
     
 then inside the bash:
 
@@ -42,4 +42,4 @@ then inside the bash:
 
 ## Example Usage:
 
-    docker run -d --name zing-serge -p 5394:8000 -e REDIS_HOST "redis" -e MYSQL_HOST "mysql" -e MYSQL_DATABASE "zing" -e MYSQL_USER "zing" -e MYSQL_PASSWORD "ChangeMe" -e SECRET_KEY "changeMe" -e ZING_TITLE "My Zing Translation Server" -v /var/serge:/var/serge -v /var/serge/lib:/usr/lib/serge/vendor/lib:ro --restart=always arturh85/zing-serge
+    docker run -d --name zing-serge -p 5394:8000 -e REDIS_HOST "redis" -e MYSQL_HOST "mysql" -e MYSQL_DATABASE "zing" -e MYSQL_USER "zing" -e MYSQL_PASSWORD "ChangeMe" -e SECRET_KEY "changeMe" -e ZING_TITLE "My Zing Translation Server" -v /var/serge:/var/serge -v /var/serge/lib:/usr/lib/serge/vendor/lib:ro --restart=always zing-serge
