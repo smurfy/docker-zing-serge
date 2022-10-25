@@ -1,5 +1,5 @@
-FROM python:3.7-slim
-ENV ZING_VERSION="v0.9.2"
+FROM python:3.7-slim-buster
+ENV ZING_VERSION="v0.9.7"
 ENV SERGE_VERSION="1.4"
 
 RUN chmod -R 2777 /tmp
@@ -23,14 +23,16 @@ RUN apt-get update && \
     supervisor \
     unzip \
     mariadb-client \
-    libmariadbclient-dev \
+    libmariadb-dev-compat \
+    libmariadb-dev \
     openssh-client && \
-    curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs && \
     mkdir -p /srv/zing/po/.tmp && \
     pip install --upgrade pip && \
     pip install mysqlclient && \
     pip install https://github.com/evernote/zing/archive/$ZING_VERSION.zip && \
+    sed -i "s|import syspath_override|from .syspath_override import *|" /usr/local/lib/python3.7/site-packages/pootle/runner.py && \
     zing --version && \
     npm i npm@latest -g && \
     zing init && \
@@ -55,7 +57,8 @@ RUN apt-get update && \
     libssl-dev \
     libxslt-dev \
     zlib1g-dev \
-    libmariadbclient-dev \
+    libmariadb-dev-compat \
+    libmariadb-dev \
     nodejs && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
