@@ -16,7 +16,7 @@ RUN cd /tmp && \
     cd /tmp && \
     rm -rf supervisord-${svVersion}
 
-FROM python:3.7-alpine
+FROM python:3.11-alpine
 
 ENV ZING_VERSION="0.9.7"
 ENV SERGE_VERSION="1.4"
@@ -65,6 +65,7 @@ RUN apk add --no-cache --update \
     # patch dependencies for security
     sed -i "s|lxml==4.4.2|lxml>=4.4.2|" /srv/zing/zing-$ZING_VERSION/requirements/base.txt && \
     sed -i "s|Django==3.1.12|Django==3.1.14|" /srv/zing/zing-$ZING_VERSION/requirements/base.txt && \
+    sed -i "s|python-levenshtein==0.12.0|python-levenshtein==0.12.1|" /srv/zing/zing-$ZING_VERSION/requirements/base.txt && \
     # update js dependencies
     cd /srv/zing/zing-$ZING_VERSION/pootle/static/js && \
     npm install && \
