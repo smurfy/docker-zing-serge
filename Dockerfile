@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster
+FROM python:3.7-slim
 ENV ZING_VERSION="v0.9.7"
 ENV SERGE_VERSION="1.4"
 
@@ -10,6 +10,7 @@ RUN apt-get update && \
     apt-get install -y \
     xsltproc \
     build-essential \
+    pkg-config \
     libexpat-dev \
     libxml2-dev \
     libssl-dev \
@@ -20,13 +21,14 @@ RUN apt-get update && \
     cron \
     wget \
     curl \
-    supervisor \
     unzip \
     mariadb-client \
     libmariadb-dev-compat \
     libmariadb-dev \
     openssh-client && \
-    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    echo "Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 1001" > /etc/apt/preferences.d/nodejs && \
+    apt-get update && \
     apt-get install -y nodejs && \
     mkdir -p /srv/zing/po/.tmp && \
     pip install --upgrade pip && \
@@ -52,6 +54,7 @@ RUN apt-get update && \
     ln -s /usr/lib/serge/bin/serge /usr/bin/serge && \
     apt-get purge -y \
     build-essential \
+    python3.11 \
     libexpat-dev \
     libxml2-dev \
     libssl-dev \
@@ -61,6 +64,12 @@ RUN apt-get update && \
     libmariadb-dev \
     nodejs && \
     apt-get autoremove -y && \
+    apt-get install -y supervisor && \
+    rm -rf /root/.cache && \
+    rm -rf /root/.cpan && \
+    rm -rf /root/.cpanm && \
+    rm -rf /root/.npm && \
+    rm -rf /tmp/* && \
     rm -rf /var/lib/apt/lists/* && \
     cp /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/checks.py /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/no_checks.py && \
     sed -i "s|@critical|@cosmetic|" /usr/local/lib/python3.7/site-packages/pootle/apps/pootle_misc/no_checks.py && \
