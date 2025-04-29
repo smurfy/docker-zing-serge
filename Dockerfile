@@ -1,4 +1,4 @@
-FROM golang:1.21 as supervisor
+FROM golang:1.24 as supervisor
 
 ARG svVersion="0.7.3"
 
@@ -6,15 +6,17 @@ RUN cd /tmp && \
     curl -L -O https://github.com/ochinchina/supervisord/archive/refs/tags/v${svVersion}.tar.gz && \
     tar -xzf v${svVersion}.tar.gz && \
     cd supervisord-${svVersion} && \
+    go get -d google.golang.org/protobuf@v1.33.0 && \
     go get -d github.com/UnnoTed/fileb0x@v1.1.4 && \
     go get -d github.com/prometheus/client_golang@v1.11.1 && \
     go get -d golang.org/x/sys@v0.0.0-20220412211240-33da011f77ad && \
-    go get -d golang.org/x/net@v0.7.0 && \
+    go get -d golang.org/x/net@v0.36.0 && \
     go generate && \
     GOOS=linux go build -tags release -a -ldflags "-linkmode external -extldflags -static" -o supervisord && \
     mv supervisord /usr/local/bin/supervisord && \
     cd /tmp && \
     rm -rf supervisord-${svVersion}
+
 
 FROM python:3.11-alpine
 
