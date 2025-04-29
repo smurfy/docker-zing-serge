@@ -1,4 +1,4 @@
-FROM golang:1.24 as supervisor
+FROM golang:1.24 AS supervisor
 
 ARG svVersion="0.7.3"
 
@@ -59,7 +59,7 @@ RUN apk add --no-cache --update \
     pip install --upgrade pip && \
     pip install mysqlclient && \
     cd /srv/zing && \
-    wget https://github.com/evernote/zing/archive/v$ZING_VERSION.zip && \
+    wget https://github.com/serge-community/zing/archive/v$ZING_VERSION.zip && \
     unzip v$ZING_VERSION.zip && \
     rm v$ZING_VERSION.zip && \
     # patch zing for python 3
@@ -88,8 +88,8 @@ RUN apk add --no-cache --update \
     zing init && \
     zing build_assets && \
     cp -r /srv/zing/zing-$ZING_VERSION/pootle/assets/translations/en /srv/zing/zing-$ZING_VERSION/pootle/assets/translations/en-us && \
-    cd /usr/lib && \
-    wget -q https://github.com/evernote/serge/archive/$SERGE_VERSION.zip -O serge-$SERGE_VERSION.zip && \
+    cd /usr/lib
+RUN wget -q https://github.com/serge-community/serge/archive/$SERGE_VERSION.zip -O serge-$SERGE_VERSION.zip && \
     unzip serge-$SERGE_VERSION.zip && \
     rm serge-$SERGE_VERSION.zip && \
     ln -s /usr/lib/serge-$SERGE_VERSION /usr/lib/serge && \
